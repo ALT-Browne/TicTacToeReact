@@ -80,6 +80,11 @@ export default function Game() {
     );
   });
 
+  if (moves.length > 1) {
+    moves.pop();
+    moves.push('You are at move #' + moves.length);
+  }
+
   return (
     <div className="game">
       <div className="game-board">
