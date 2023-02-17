@@ -2,7 +2,7 @@ import React from 'react';
 import { useState } from 'react';
 
 function Square({ value, onSquareClick }) {
-        return <button className="square" onClick={onSquareClick}>{value}</button>;
+        return <button className="square" onClick={onSquareClick}>{value}</button>; //could just return this tag directly in renderBoard logic...
 }
 
 function Board({ xIsNext, squares, onPlay }) {
@@ -20,6 +20,22 @@ function Board({ xIsNext, squares, onPlay }) {
                 onPlay(nextSquares);
         }
 
+        function renderBoard(size) {
+                const board = [];
+                for (let i = 0; i < size; i++) {
+                        let row = [];
+                        for (let j = 0; j < size; j++) {
+                                row.push(<Square key={i * size + j} value={squares[i * size + j]} onSquareClick={() => handleClick(i * size + j)} />);
+                        }
+                        board.push(
+                                <div key={i} className="board-row">
+                                        {row}
+                                </div>
+                        )
+                }
+                return board;
+        }
+
         const winner = calculateWinner(squares);
         let status;
         if (winner) {
@@ -29,33 +45,14 @@ function Board({ xIsNext, squares, onPlay }) {
         }
 
         return (
-                <React.Fragment>
+                <div>
                         <div className='status'>{status}</div>
-                        <div className='board-row'>
-                                <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
-                                <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
-                                <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
-                        </div>
-                        <div className='board-row'>
-                                <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
-                                <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
-                                <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
-                        </div>
-                        <div className='board-row'>
-                                <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
-                                <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
-                                <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
-                        </div>
-                </React.Fragment>
+                        {renderBoard(3)}
+                </div>
         );
 }
 
 export default function Game() {
-        const [history, setHistory] = useState([Array(9).fill(null)]);
-        const [currentMove, setCurrentMove] = useState(0);
-        const xIsNext = currentMove % 2 === 0;
-        const currentSquares = history[currentMove];
-
         function handlePlay(nextSquares) {
                 const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
                 setHistory(nextHistory);
@@ -66,6 +63,10 @@ export default function Game() {
                 setCurrentMove(nextMove);
         }
 
+        const [history, setHistory] = useState([Array(9).fill(null)]);
+        const [currentMove, setCurrentMove] = useState(0);
+        const xIsNext = currentMove % 2 === 0;
+        const currentSquares = history[currentMove];
         const moves = history.map((squares, move) => {
                 let description;
                 if (move > 0) {
