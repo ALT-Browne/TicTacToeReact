@@ -76,16 +76,33 @@ export default function Game() {
         const currentSquares = history[currentMove];
         const moves = history.map((squares, move) => {
                 let description;
+                let prevMove;
+                let currMoveLocation = [null, null];
                 if (move > 0) {
                         description = 'Go to move #' + move;
+                        prevMove = history[move - 1];
+                        for (let i = 0; i < squares.length; i++) {
+                                if (squares[i] != null && prevMove[i] === null) {
+                                        currMoveLocation = [Math.floor(i / 3) + 1, (i % 3) + 1];
+                                }
+                        }
                 } else {
                         description = 'Go to game start';
+                        currMoveLocation = [null, null];
                 }
-                return (
-                        <li key={move}>
-                                <button onClick={() => jumpTo(move)}>{description}</button>
-                        </li>
-                );
+                if (currMoveLocation[0] === null && currMoveLocation[1] === null) {
+                        return (
+                                <li key={move}>
+                                        <button onClick={() => jumpTo(move)}>{description}</button>
+                                </li>
+                        );
+                } else {
+                        return (
+                                <li key={move}>
+                                        <button onClick={() => jumpTo(move)}>{description + " (row " + currMoveLocation[0] + ", col " + currMoveLocation[1] + ")"}</button>
+                                </li>
+                        );//could make a custom element which has a proeprty "isStartButton", which determines the description to be passed. This avoids the messy repeat return statement here..... is it worth it?
+                }
         });
         const [movesIsAscending, setMovesIsAscending] = useState(true);
 
