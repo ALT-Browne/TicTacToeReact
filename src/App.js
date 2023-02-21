@@ -2,7 +2,11 @@ import React from 'react';
 import { useState } from 'react';
 
 function Square({ value, winningSquare, onSquareClick }) {
-        return <button className={winningSquare ? "winning-square" : "square"} onClick={onSquareClick}>{value}</button>; //could just return this tag directly in renderBoard logic...
+        return <button className={winningSquare ? "winning-square" : "square"} onClick={onSquareClick}>{value}</button>;
+}
+
+function MoveButton({ onClick, description, currMoveLocation }) {
+        return currMoveLocation[0] === null && currMoveLocation[1] === null ? <button onClick={onClick}>{description}</button> : <button onClick={onClick}>{description + " (row " + currMoveLocation[0] + ", col " + currMoveLocation[1] + ")"}</button>;
 }
 
 function Board({ xIsNext, squares, onPlay }) {
@@ -90,19 +94,12 @@ export default function Game() {
                         description = 'Go to game start';
                         currMoveLocation = [null, null];
                 }
-                if (currMoveLocation[0] === null && currMoveLocation[1] === null) {
-                        return (
-                                <li key={move}>
-                                        <button onClick={() => jumpTo(move)}>{description}</button>
-                                </li>
-                        );
-                } else {
-                        return (
-                                <li key={move}>
-                                        <button onClick={() => jumpTo(move)}>{description + " (row " + currMoveLocation[0] + ", col " + currMoveLocation[1] + ")"}</button>
-                                </li>
-                        );//could make a custom element which has a proeprty "isStartButton", which determines the description to be passed. This avoids the messy repeat return statement here..... is it worth it?
-                }
+
+                return (
+                        <li key={move}>
+                                <MoveButton description={description} currMoveLocation={currMoveLocation} onClick={() => jumpTo(move)} />
+                        </li>
+                );
         });
         const [movesIsAscending, setMovesIsAscending] = useState(true);
 
