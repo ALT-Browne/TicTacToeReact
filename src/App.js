@@ -96,9 +96,10 @@ export default function Game() {
                 }
 
                 return (
-                        <li key={move}>
+                        <div>
                                 <MoveButton description={description} currMoveLocation={currMoveLocation} onClick={() => jumpTo(move)} />
-                        </li>
+                        </div>
+
                 );
         });
         const [movesIsAscending, setMovesIsAscending] = useState(true);
@@ -109,8 +110,12 @@ export default function Game() {
                                 <Board xIsNext={xIsNext} squares={currentSquares} onPlay={handlePlay} />
                         </div>
                         <div className="game-info">
-                                <button onClick={() => changeMovesOrder()}>{movesIsAscending ? "Descending" : "Ascending"}</button>
-                                <ol>{movesIsAscending ? moves : moves.reverse()}</ol>
+                                <div className="block" >
+                                        {movesIsAscending ? moves : moves.reverse()}
+                                </div>
+                                <div className="block">
+                                        <button onClick={() => changeMovesOrder()}>{movesIsAscending ? "Descending" : "Ascending"}</button>
+                                </div>
                         </div>
                 </div>
         );

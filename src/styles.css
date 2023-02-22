@@ -42,24 +42,6 @@ code {
         font-size: 1.2em;
 }
 
-ul {
-        padding-left: 20px;
-}
-
-* {
-        box-sizing: border-box;
-}
-
-body {
-        font-family: sans-serif;
-        margin: 20px;
-        padding: 0;
-}
-
-ol li {
-        list-style: none;
-}
-
 .square {
         background: #fff;
         border: 1px solid #999;
@@ -107,4 +89,11 @@ ol li {
 
 .game-info {
         margin-left: 20px;
+        display: flex;
+        flex-direction: column;
+}
+
+.block {
+        width: fit-content;
+        margin-top: 10px;
 }
